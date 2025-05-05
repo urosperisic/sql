@@ -1,0 +1,30 @@
+# VS Code / PyCharm / IDE folders
+.idea/
+.vscode/
+
+# Python virtual environment
+venv/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# pytest cache
+.pytest_cache/
+
+# Coverage reports
+.coverage
+htmlcov/
+coverage.xml
+*.cover
+*.log
+
+# Custom
+testignore.txt
+test_py.py
+
+# Misc
+.DS_Store
+*.swp
