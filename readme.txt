@@ -22,6 +22,7 @@ pip install pytest
 pip install pytest-cov
 
 pytest
+pytest -s
 pytest --cov=app_test
 pytest --cov=app_test --cov-report=term-missing
 
