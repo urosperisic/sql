@@ -28,3 +28,5 @@ test_py.py
 # Misc
 .DS_Store
 *.swp
+
+003_progdiary/data.db
