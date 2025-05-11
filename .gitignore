@@ -30,3 +30,4 @@ test_py.py
 *.swp
 
 003_progdiary/data.db
+003_progdiary/test.db
