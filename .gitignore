@@ -31,3 +31,5 @@ test_py.py
 
 003_progdiary/data.db
 003_progdiary/test.db
+
+001_expenses/expenses.json
