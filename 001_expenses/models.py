@@ -49,7 +49,7 @@ class Expense(ABC):
         }
 
     def __str__(self):
-        return f"{self.category()} - {self.description} - {self.amount} RSD ({self.date.date()})"
+        return f"{self.category():<15} | {self.description:<30} | {self.amount:>10.2f} RSD | {self.date.date()}"
 
 
 class Food(Expense):
