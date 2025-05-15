@@ -1,6 +1,6 @@
 from manager import ExpenseManager
 from models import Food, Travel, Utilities
-from utils import input_positive_amount, input_date, choose_category
+from utils import input_positive_amount, input_date, choose_category, print_error
 
 def menu():
     file = "expenses.json"
@@ -35,7 +35,7 @@ def menu():
             try:
                 manager.add_expense(classes[cat](amount, date, description))
             except ValueError as e:
-                print(f"Error: {e}")
+                print_error(f"Error: {e}")
 
         elif choice == "2":
             for i, e in enumerate(manager.all_expenses()):
@@ -48,13 +48,17 @@ def menu():
                     print(f"        {e}")
 
         elif choice == "4":
-            start = input_date("Start date (YYYY-MM-DD): ")
-            end = input_date("End date (YYYY-MM-DD): ")
+            try:
+                start = input_date("Start date (YYYY-MM-DD): ")
+                end = input_date("End date (YYYY-MM-DD): ")
 
-            print()
+                print()
 
-            for e in manager.filter_by_date_range(start, end):
-                print(f"        {e}")
+                for e in manager.filter_by_date_range(start, end):
+                    print(f"        {e}")
+            except ValueError as e:
+                print_error(f"Error: {e}")
+
 
         elif choice == "5":
             cat = choose_category(classes)
@@ -68,20 +72,20 @@ def menu():
                 entry = input("\nNew amount (or Enter to skip): ").strip()
                 amount = float(entry) if entry else None
                 if amount is not None and amount < 0:
-                    print("Amount cannot be negative.")
+                    print_error("Amount cannot be negative.")
                     continue
                 date = input("New date (or Enter to skip): ").strip()
                 description = input("New description (or Enter to skip): ").strip()
                 manager.edit_expense(index, amount, date if date else None, description if description else None)
             except ValueError:
-                print("Invalid input.")
+                print_error("Invalid input.")
 
         elif choice == "7":
             try:
                 index = int(input("Index of expense to delete: "))
                 manager.delete_expense(index)
             except ValueError:
-                print("Invalid index input.")
+                print_error("Invalid index input.")
 
         elif choice == "8":
             print(f"        Total expenses: {manager.total_all_expenses()} RSD")
@@ -92,7 +96,7 @@ def menu():
             break
 
         else:
-            print("Unknown option.")
+            print_error("Unknown option.")
 
 if __name__ == "__main__":
     menu()

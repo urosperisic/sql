@@ -1,5 +1,8 @@
 from datetime import datetime
 
+def print_error(msg):
+    print(f"\033[91m{msg}\033[0m")
+
 def input_positive_amount():
     while True:
         entry = input("Amount: ").strip()
@@ -22,7 +25,7 @@ def input_date(prompt="Date (YYYY-MM-DD): "):
             datetime.strptime(entry, "%Y-%m-%d")
             return entry
         except ValueError:
-            print("Invalid date format. Use YYYY-MM-DD.")
+            print_error("Invalid date format. Use YYYY-MM-DD.")
 
 def choose_category(classes: dict):
     categories = list(classes.keys())
@@ -39,5 +42,5 @@ def choose_category(classes: dict):
 
         return categories[choice - 1]
     except (ValueError, IndexError):
-        print("Invalid choice.")
+        print_error("Invalid choice.")
         return None
