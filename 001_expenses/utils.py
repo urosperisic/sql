@@ -3,6 +3,12 @@ from datetime import datetime
 def print_error(msg):
     print(f"\033[91m{msg}\033[0m")
 
+def print_title(msg):
+    print(f"\033[93m{msg}\033[0m")
+
+def print_entry(msg):
+    print(f"\033[96m{msg}\033[0m")
+
 def input_positive_amount():
     while True:
         entry = input("Amount: ").strip()

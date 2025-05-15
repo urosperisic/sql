@@ -1,6 +1,6 @@
 from manager import ExpenseManager
 from models import Food, Travel, Utilities
-from utils import input_positive_amount, input_date, choose_category, print_error
+from utils import input_positive_amount, input_date, choose_category, print_error, print_title, print_entry
 
 def menu():
     file = "expenses.json"
@@ -10,7 +10,7 @@ def menu():
     classes = {"Food": Food, "Travel": Travel, "Utilities": Utilities}
 
     while True:
-        print("\n--- Personal Expense Tracker ---")
+        print_title("\n--- Personal Expense Tracker ---")
         print("1. Add expense")
         print("2. Show all expenses")
         print("3. Filter by category")
@@ -39,13 +39,13 @@ def menu():
 
         elif choice == "2":
             for i, e in enumerate(manager.all_expenses()):
-                print(f"        {i}: {e}")
+                print_entry(f"        {i}: {e}")
 
         elif choice == "3":
             cat = choose_category(classes)
             if cat:
                 for e in manager.filter_by_category(cat):
-                    print(f"        {e}")
+                    print_entry(f"        {e}")
 
         elif choice == "4":
             try:
@@ -55,7 +55,7 @@ def menu():
                 print()
 
                 for e in manager.filter_by_date_range(start, end):
-                    print(f"        {e}")
+                    print_entry(f"        {e}")
             except ValueError as e:
                 print_error(f"Error: {e}")
 
@@ -64,7 +64,7 @@ def menu():
             cat = choose_category(classes)
             if cat:
                 total = manager.total_by_category(cat)
-                print(f"        Total for {cat}: {total} RSD")
+                print_entry(f"        Total for {cat}: {total} RSD")
 
         elif choice == "6":
             try:
@@ -88,7 +88,7 @@ def menu():
                 print_error("Invalid index input.")
 
         elif choice == "8":
-            print(f"        Total expenses: {manager.total_all_expenses()} RSD")
+            print_entry(f"        Total expenses: {manager.total_all_expenses()} RSD")
 
         elif choice == "0":
             manager.save_to_json(file)
