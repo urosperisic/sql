@@ -1,65 +1,7 @@
 import json
-from abc import ABC, abstractmethod
+from typing import List
 from datetime import datetime
-from typing import List, Optional
-
-class Expense(ABC):
-    def __init__(self, amount: float, date: str, description: str):
-        self.amount = amount
-        self.date = date
-        self.description = description
-
-    @property
-    def amount(self):
-        return self._amount
-
-    @amount.setter
-    def amount(self, value):
-        if value < 0:
-            raise ValueError("Amount cannot be negative.")
-        self._amount = value
-
-    @property
-    def date(self):
-        return self._date
-
-    @date.setter
-    def date(self, value):
-        self._date = datetime.strptime(value, "%Y-%m-%d")
-
-    @property
-    def description(self):
-        return self._description
-
-    @description.setter
-    def description(self, value):
-        self._description = value
-
-    @abstractmethod
-    def category(self) -> str:
-        pass
-
-    def to_dict(self):
-        return {
-            "amount": self.amount,
-            "date": self.date.strftime("%Y-%m-%d"),
-            "description": self.description,
-            "category": self.category()
-        }
-
-
-class Food(Expense):
-    def category(self):
-        return "Food"
-
-class Travel(Expense):
-    def category(self):
-        return "Travel"
-
-class Utilities(Expense):
-    def category(self):
-        return "Utilities"
-
+from models import Expense, Food, Travel, Utilities
 
 class ExpenseManager:
     def __init__(self):
@@ -68,8 +10,7 @@ class ExpenseManager:
     def add_expense(self, expense: Expense):
         self.expenses.append(expense)
 
-    def edit_expense(self, index: int, amount: Optional[float] = None,
-                     date: Optional[str] = None, description: Optional[str] = None):
+    def edit_expense(self, index: int, amount=None, date=None, description=None):
         if 0 <= index < len(self.expenses):
             if amount is not None:
                 self.expenses[index].amount = amount
@@ -93,6 +34,9 @@ class ExpenseManager:
     def total_by_category(self, category: str) -> float:
         return sum(e.amount for e in self.expenses if e.category() == category)
 
+    def total_all_expenses(self) -> float:
+        return sum(e.amount for e in self.expenses)
+
     def all_expenses(self) -> List[Expense]:
         return self.expenses
 
@@ -107,7 +51,9 @@ class ExpenseManager:
                 for e in data:
                     self.expenses.append(self._create_expense_from_dict(e))
         except FileNotFoundError:
-            pass
+            print(f"No existing data found in {file}. Starting fresh.")
+        except json.JSONDecodeError:
+            print("Failed to decode JSON. The file might be corrupted.")
 
     def _create_expense_from_dict(self, data: dict) -> Expense:
         cls = {

@@ -1,5 +1,6 @@
 import unittest
-from expenses import Food, Travel, Utilities, ExpenseManager
+from models import Food, Travel, Utilities
+from manager import ExpenseManager
 
 class TestExpenses(unittest.TestCase):
 
@@ -33,6 +34,28 @@ class TestExpenses(unittest.TestCase):
     def test_delete_expense(self):
         self.manager.delete_expense(1)
         self.assertEqual(len(self.manager.all_expenses()), 2)
+
+    def test_total_all_expenses(self):
+        total = self.manager.total_all_expenses()
+        self.assertEqual(total, 1200 + 5000 + 3000)
+
+    def test_invalid_amount(self):
+        with self.assertRaises(ValueError):
+            Food(-100, "2025-01-01", "Invalid expense")
+
+    def test_invalid_date_format(self):
+        with self.assertRaises(ValueError):
+            Travel(200, "01-01-2025", "Bad date")
+
+    def test_edit_with_invalid_index(self):
+        # Should not raise but should not change anything
+        self.manager.edit_expense(10, amount=9999)
+        self.assertEqual(self.manager.total_by_category("Food"), 1200)
+
+    def test_delete_with_invalid_index(self):
+        self.manager.delete_expense(10)  # Should silently fail
+        self.assertEqual(len(self.manager.all_expenses()), 3)
+
 
 if __name__ == "__main__":
     unittest.main()
